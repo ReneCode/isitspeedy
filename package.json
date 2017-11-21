@@ -1,0 +1,19 @@
+{
+  "name": "isitspeedy",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node backend/src/app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ReneCode/isitspeedy.git"
+  },
+  "author": "Reinhard Langner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ReneCode/isitspeedy/issues"
+  },
+  "homepage": "https://github.com/ReneCode/isitspeedy#readme"
+}
