@@ -11,8 +11,8 @@ webServer.createServer();
 
 webServer.listen()
   .then(() => {
-    console.log("server listen on port:", OPTIONS.port);
+    console.log("Server listen on port:", OPTIONS.port);
   })
   .catch((err) => {
-    console.log("can not start to blobstorage:", err);
+    console.log("Can not start Server:", err);
   });
