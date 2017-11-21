@@ -9,9 +9,10 @@ const run = (req, res) => {
   const config = req.body
   console.log(config)
 
-  let requests = config.requests
+  let requests = config.requests;
+  let clients = config.clients || 1;
   if (requests && Array.isArray(requests) && requests.length > 0) {
-    executeRequest.execute(requests)
+    executeRequest.executeMultiClients(requests, clients)
       .then(results => {
         res.json(results)
       })

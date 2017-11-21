@@ -6,18 +6,18 @@ const StopWatch = require('./stop-watch')
 
 class ExecuteRequest {
 
-  execute(requests) {
-
+  execute(requests, client) {
     const results = [];
 
     const executeRequest = (request) => {
-      // console.log("executeRequest:", request)
       const watch = new StopWatch();
       watch.start();
       return axios.get(request)
         .then(r => {
           const dur = watch.stop();
+          console.log("executeRequest:", client, request)
           results.push({
+            client: client,
             ok: true,
             url: request,
             status: r.status,
@@ -31,6 +31,7 @@ class ExecuteRequest {
           }
           const dur = watch.stop();
           results.push({
+            client: client,
             error: "" + e,
             url: request,
             status: status,
@@ -40,7 +41,7 @@ class ExecuteRequest {
     }
 
     return Promise.each(requests, (request) => {
-      return executeRequest(request)
+      return executeRequest(request, client)
     })
       .then(r => {
         return results;
@@ -48,6 +49,14 @@ class ExecuteRequest {
       .catch(err => {
         return results;
       })
+  }
+
+  executeMultiClients(requests, countClients) {
+    const promises = [];
+    for (let client = 0; client < countClients; client++) {
+      promises.push(this.execute(requests, client));
+    }
+    return Promise.all(promises)
   }
 }
 
