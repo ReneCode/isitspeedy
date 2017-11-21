@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var jwt = require('express-jwt');
 
 var routeHome = require('./route/home');
-var routeApi = require('./route/api');
+// var routeApi = require('./route/api');
 
 class WebServer {
 
@@ -18,8 +18,10 @@ class WebServer {
 			throw new Error("options missing")
 		}
 		this.options = options;
-		if (this.options.authorize === undefined) this.options.authorize = true;
-		if (this.options.logging === undefined) this.options.logging = true;
+		if (this.options.authorize === undefined)
+			this.options.authorize = true;
+		if (this.options.logging === undefined)
+			this.options.logging = true;
 	}
 
 	listen() {
@@ -38,7 +40,9 @@ class WebServer {
 		var app = express();
 
 		app.use(bodyParser.json());
-		app.use(bodyParser.urlencoded({ extended: true }));
+		app.use(bodyParser.urlencoded({
+			extended: true
+		}));
 		app.use(cors());
 
 		if (this.options.logging) {
@@ -59,10 +63,10 @@ class WebServer {
 				secret: new Buffer(AUTH0_SECRET),
 				audience: AUTH0_AUDIENCE
 			});
-			
+
 			app.use(authCheck);
 		}
-		app.use("/api/v1/", routeApi);
+		// app.use("/api/v1/", routeApi);
 
 		this.server = http.createServer(app);
 
