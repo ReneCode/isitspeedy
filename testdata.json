@@ -1,7 +1,0 @@
-{
-  "sequence": [
-    "https://cs2-projectviewerservice-dev.azurewebsites.net/",
-    "https://cs2-projectviewerservice-perf.azurewebsites.net/",
-    "https://cs2-landingpageservice-dev.azurewebsites.net/"
-  ]
-}
