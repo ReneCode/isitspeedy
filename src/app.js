@@ -11,7 +11,7 @@ webServer.createServer();
 
 webServer.listen()
   .then(() => {
-    console.log("Server listen on port:", OPTIONS.port);
+    console.log(`Server listen on port: ${OPTIONS.port}`);
   })
   .catch((err) => {
     console.log("Can not start Server:", err);
