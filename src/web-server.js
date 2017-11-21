@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var jwt = require('express-jwt');
 
 var routeHome = require('./route/home');
-// var routeApi = require('./route/api');
+var routeApi = require('./route/api');
 
 class WebServer {
 
@@ -66,7 +66,7 @@ class WebServer {
 
 			app.use(authCheck);
 		}
-		// app.use("/api/v1/", routeApi);
+		app.use("/api/v1/", routeApi);
 
 		this.server = http.createServer(app);
 
