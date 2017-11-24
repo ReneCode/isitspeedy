@@ -6,16 +6,18 @@ var express = require('express');
 
 var router = express.Router();
 
-const runRouter = require('./run')
+const runRoute = require('./run-route')
+const logRoute = require('./log-route')
 
 const getConfig = (req, res) => {
-  res.send("abc")
+  res.send("this is my config")
 }
 
 
 router.get("/config", getConfig);
 
-router.use("/run", runRouter);
+router.use("/run", runRoute);
+router.use("/log", logRoute);
 
 module.exports = router;
 

@@ -8,8 +8,8 @@ var bodyParser = require('body-parser');
 
 var jwt = require('express-jwt');
 
-var routeHome = require('./route/home');
-var routeApi = require('./route/api');
+var homeRoute = require('./route/home-route');
+var apiRoute = require('./route/api-route');
 
 class WebServer {
 
@@ -49,7 +49,7 @@ class WebServer {
 			app.use(logger('dev'));
 		}
 
-		app.use("/", routeHome);
+		app.use("/", homeRoute);
 
 		if (this.options.authorize) {
 			const AUTH0_SECRET = process.env.AUTH0_SECRET;
@@ -66,7 +66,7 @@ class WebServer {
 
 			app.use(authCheck);
 		}
-		app.use("/api/v1/", routeApi);
+		app.use("/api/v1/", apiRoute);
 
 		this.server = http.createServer(app);
 
