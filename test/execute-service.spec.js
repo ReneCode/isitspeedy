@@ -47,36 +47,44 @@ describe('executeService', () => {
   describe('#aggregateResults', () => {
     const resultsIn = [
       {
+        url: 'https://bing.com',
+        duration: 5
+      },
+      {
         url: 'https://google.com',
         duration: 10
       },
       {
         url: 'https://google.com',
-        duration: 20
+        duration: 30
       },
       {
         url: 'https://google.com',
         duration: 50
       }];
+
     it('aggregateResults', () => {
-      return executeService.aggregateResults(resultsIn, 'detail')
-        .then(results => {
-          results.should.be.deep.equal(resultsIn);
-        })
+      const results = executeService.aggregateResults(resultsIn, 'detail')
+      results.should.be.deep.equal(resultsIn);
     })
 
-    it.skip("aggregateResults 'summary'", () => {
+    it("aggregateResults 'summary'", () => {
       const expect = [
+        {
+          url: 'https://bing.com',
+          maxDuration: 5,
+          minDuration: 5,
+          avgDuration: 5
+        },
         {
           url: 'https://google.com',
           maxDuration: 50,
-          minDuration: 50,
-          avgDuration: 50
+          minDuration: 10,
+          avgDuration: 30
         }];
-      return executeService.aggregateResults(resultsIn, 'summary')
-        .then(results => {
-          results.should.be.a('object')
-        })
+      let results = executeService.aggregateResults(resultsIn, 'summary')
+      results.should.be.a('array')
+      results.should.be.deep.equal(expect)
     })
   })
 

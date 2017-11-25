@@ -74,7 +74,48 @@ class ExecuteService {
 
 
   aggregateResults(results, mode) {
-    return Promise.resolve(results);
+
+    const summarize = () => {
+      const result = {}
+      results.forEach(r => {
+        const key = r.url
+        if (!result[key]) {
+          result[key] = {
+            url: key,
+            durations: []
+          }
+        }
+        let entry = result[key];
+        entry.durations.push(r.duration)
+      })
+      const summarizedData = []
+      for (let p in result) {
+        let data = result[p]
+        let min = data.durations[0]
+        let max = data.durations[0]
+        let sum = 0
+        data.durations.forEach(d => {
+          min = Math.min(min, d)
+          max = Math.max(min, d)
+          sum += d
+        })
+        data.maxDuration = max
+        data.minDuration = min
+        data.avgDuration = sum / data.durations.length
+
+        delete data.durations
+
+        summarizedData.push(data)
+      }
+      return summarizedData
+    }
+
+    switch (mode) {
+      case 'detail':
+        return results;
+      case 'summary':
+        return summarize(results);
+    }
   }
 }
 
