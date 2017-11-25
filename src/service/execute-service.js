@@ -1,12 +1,12 @@
-
 const axios = require('axios');
 const Promise = require('bluebird');
 
-const StopWatch = require('./stop-watch')
+const StopWatch = require('../utility/stop-watch')
 
-class ExecuteRequest {
 
-  execute(requests, client) {
+class ExecuteService {
+
+  runSingleClient(requests, client) {
     const results = [];
 
     const executeRequest = (request) => {
@@ -15,7 +15,7 @@ class ExecuteRequest {
       return axios.get(request)
         .then(r => {
           const dur = watch.stop();
-          console.log("executeRequest:", client, request)
+          // console.log("executeRequest:", client, request)
           results.push({
             client: client,
             ok: true,
@@ -51,14 +51,31 @@ class ExecuteRequest {
       })
   }
 
-  executeMultiClients(requests, countClients) {
+  runMultiClients(requests, countClients) {
+    if (requests.length * countClients > 100) {
+      return Promise.reject("too many requests / clients");
+    }
+
     const promises = [];
     for (let client = 0; client < countClients; client++) {
-      promises.push(this.execute(requests, client));
+      promises.push(this.runSingleClient(requests, client));
     }
     return Promise.all(promises)
+      .then(r => {
+        // put results from all clients together in one array
+        let results = [];
+        r.forEach(r => {
+          results = results.concat(r)
+        })
+        return Promise.resolve(results)
+      })
+      .catch(err => Promise.reject(err))
+  }
+
+
+  aggregateResults(results, mode) {
+    return Promise.resolve(results);
   }
 }
 
-module.exports = new ExecuteRequest()
-
+module.exports = new ExecuteService()

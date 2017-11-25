@@ -2,6 +2,8 @@
 const azure = require("azure-storage");
 const Guid = require("guid");
 
+// https://docs.microsoft.com/de-de/azure/cosmos-db/table-storage-how-to-use-nodejs
+
 class LogService {
 
   constructor() {

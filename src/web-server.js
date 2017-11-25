@@ -66,7 +66,7 @@ class WebServer {
 
 			app.use(authCheck);
 		}
-		app.use("/api/v1/", apiRoute);
+		app.use("/api", apiRoute);
 
 		this.server = http.createServer(app);
 

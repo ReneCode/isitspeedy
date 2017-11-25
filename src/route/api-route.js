@@ -6,7 +6,7 @@ var express = require('express');
 
 var router = express.Router();
 
-const runRoute = require('./run-route')
+const executeRoute = require('./execute-route')
 const logRoute = require('./log-route')
 
 const getConfig = (req, res) => {
@@ -16,7 +16,7 @@ const getConfig = (req, res) => {
 
 router.get("/config", getConfig);
 
-router.use("/run", runRoute);
+router.use("/execute", executeRoute);
 router.use("/log", logRoute);
 
 module.exports = router;

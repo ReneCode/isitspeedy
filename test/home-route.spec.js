@@ -4,7 +4,7 @@ const should = require('chai').should();
 
 const URL = 'http://localhost:3102/';
 
-describe('home', () => {
+describe('home-route', () => {
   it('should start server', () => {
     return axios.get(URL)
       .then(result => {
