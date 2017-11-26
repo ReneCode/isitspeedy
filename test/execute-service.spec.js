@@ -11,37 +11,83 @@ describe('executeService', () => {
     "https://bing.com"
   ]
 
-  let sandbox;
-  beforeEach(() => {
-    sandbox = sinon.createSandbox();
-    const stub = new Promise((r) => {
-      r({
+
+  describe('#run', () => {
+
+    let sandbox;
+    let stubGet;
+    beforeEach(() => {
+      sandbox = sinon.createSandbox();
+      stubGet = sandbox.stub(axios, 'get').resolves({
         status: 200
-      });
+      })
     })
-    sandbox.stub(axios, 'get').returns(stub)
+    afterEach(() => {
+      sandbox.restore();
+    })
 
-  })
-  afterEach(() => {
-    sandbox.restore();
-  })
+    it('runSingleClient', () => {
+      return executeService.runSingleClient(requests, {}, 42)
+        .then(result => {
+          result.should.be.a('array')
+          result.length.should.be.equal(2)
+          result[0].url.should.be.equal(requests[0])
+          result[0].client.should.be.equal(42)
+        })
+    })
 
-  it('runSingleClient', () => {
-    return executeService.runSingleClient(requests, 42)
-      .then(result => {
-        result.should.be.a('array')
-        result.length.should.be.equal(2)
-        result[0].url.should.be.equal(requests[0])
-        result[0].client.should.be.equal(42)
-      })
-  })
+    it('runSingleClient should set headers', () => {
+      const headers = {
+        auth: "secrect"
+      }
+      return executeService.runSingleClient(requests, {
+        headers: headers
+      }, 1)
+        .then(result => {
+          stubGet.getCall(0).args[0].should.be.equal(requests[0])
+          stubGet.getCall(0).args[1].should.be.deep.equal({
+            headers: headers
+          })
+        })
+    })
 
-  it('runMultiClients', () => {
-    return executeService.runMultiClients(requests, 3)
-      .then(result => {
-        result.should.be.a('array')
-        result.length.should.be.equal(2 * 3)
-      })
+    it('execute for 1 (default) clients', () => {
+      const config = {
+        requests: requests,
+      }
+      return executeService.execute(config)
+        .then(result => {
+          result.should.be.a('array')
+          result.length.should.be.equal(2 * 1)
+        })
+    })
+
+    it('execute for 3 clients', () => {
+      const config = {
+        requests: requests,
+        clients: 3
+      }
+      return executeService.execute(config)
+        .then(result => {
+          result.should.be.a('array')
+          result.length.should.be.equal(2 * 3)
+        })
+    })
+
+    it('execute with header', () => {
+      const config = {
+        requests: requests,
+        clients: 3,
+        header: {
+          abc: "a-b-c"
+        }
+      }
+      return executeService.execute(config)
+        .then(result => {
+          result.should.be.a('array')
+          result.length.should.be.equal(2 * 3)
+        })
+    })
   })
 
   describe('#aggregateResults', () => {

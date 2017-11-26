@@ -6,13 +6,13 @@ const StopWatch = require('../utility/stop-watch')
 
 class ExecuteService {
 
-  runSingleClient(requests, client) {
+  runSingleClient(requests, options, client) {
     const results = [];
 
     const executeRequest = (request) => {
       const watch = new StopWatch();
       watch.start();
-      return axios.get(request)
+      return axios.get(request, options)
         .then(r => {
           const dur = watch.stop();
           // console.log("executeRequest:", client, request)
@@ -51,14 +51,26 @@ class ExecuteService {
       })
   }
 
-  runMultiClients(requests, countClients) {
+  execute(config) {
+    let requests = config.requests;
+    let countClients = config.clients || 1;
+
+    if (!(requests && Array.isArray(requests) && requests.length > 0)) {
+      return Promise.reject("requests missing");
+    }
+
     if (requests.length * countClients > 100) {
       return Promise.reject("too many requests / clients");
     }
 
+    const headers = config.headers;
+    const options = {
+      headers: headers
+    };
+
     const promises = [];
     for (let client = 0; client < countClients; client++) {
-      promises.push(this.runSingleClient(requests, client));
+      promises.push(this.runSingleClient(requests, options, client));
     }
     return Promise.all(promises)
       .then(r => {
