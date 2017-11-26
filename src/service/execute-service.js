@@ -127,6 +127,8 @@ class ExecuteService {
         return results;
       case 'summary':
         return summarize(results);
+      default:
+        return results;
     }
   }
 }

@@ -10,7 +10,7 @@ router.post("/", (req, res) => {
   const config = req.body
 
   const mode = req.query.mode || 'detail';
-  executeService.execute(requests, clients)
+  executeService.execute(config)
     .then(results => {
       return executeService.aggregateResults(results, mode);
     })
