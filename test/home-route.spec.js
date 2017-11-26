@@ -8,7 +8,7 @@ describe('home-route', () => {
   it('should start server', () => {
     return axios.get(URL)
       .then(result => {
-        result.data.should.contain('is it speedy - backend');
+        result.data.should.contain('is it speedy');
       })
   })
 })
